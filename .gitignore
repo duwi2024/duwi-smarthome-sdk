@@ -1,0 +1,19 @@
+/test/api/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Packaging files
+dist/
+build/
+*.egg
+*.egg-info/
+
+# virtual environment
+venv/
+ENV/
+
+# IDE - PyCharm
+.idea/
+*.iml
