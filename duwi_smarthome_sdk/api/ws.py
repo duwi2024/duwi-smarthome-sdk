@@ -45,7 +45,7 @@ class DeviceSynchronizationWS:
 
     async def send(self, message):
         if self._connection:
-            _LOGGER.info('send message: %s', message)
+            # _LOGGER.info('send message: %s', message)
             await self._connection.send(message)
 
     async def disconnect(self):
@@ -71,8 +71,11 @@ class DeviceSynchronizationWS:
                 _LOGGER.info('listen ws connection closed, trying to reconnect...')
                 await self.reconnect()
                 await asyncio.sleep(5)
+            except Exception as e:
+                _LOGGER.error(f'An error occurred during listen: {e}')
 
     async def link(self):
+        _LOGGER.info('link...')
         timestamp = current_timestamp()
         client_id = md5_encrypt(timestamp)
 
@@ -88,6 +91,7 @@ class DeviceSynchronizationWS:
         )
 
     async def bind(self):
+        _LOGGER.info('bind...')
         data = {
             "accessToken": self._access_token,
             "houseNo": self._house_no,
@@ -126,6 +130,8 @@ class DeviceSynchronizationWS:
             except websockets.exceptions.ConnectionClosedError:
                 _LOGGER.info('keep_alive ws,connection closed, trying to reconnect...')
                 await self.reconnect()
+            except Exception as e:
+                _LOGGER.error(f'An error occurred during keep_alive: {e}')
 
     async def process_messages(self):
         async for message in self._connection:
