@@ -13,6 +13,7 @@ class Commands:
 class ControlDevice:
     def __init__(self, device_no, house_no):
         self.device_no = device_no
+        self.device_group_no = device_no
         self.house_no = house_no
         self.commands = []
 
@@ -31,6 +32,7 @@ class ControlDevice:
 
         return {
             'deviceNo': self.device_no,
+            'deviceGroupNo': self.device_group_no,
             'houseNo': self.house_no,
             'commands': commands_list,
         }

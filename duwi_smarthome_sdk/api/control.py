@@ -16,7 +16,8 @@ class ControlClient:
                  access_token: str,
                  app_version: str,
                  client_version: str,
-                 client_model: str = None
+                 client_model: str = None,
+                 is_group: bool = False
                  ):
         self._url = URL
         self._app_key = app_key
@@ -25,6 +26,7 @@ class ControlClient:
         self._app_version = app_version
         self._client_version = client_version
         self._client_model = client_model
+        self._is_group = is_group
 
     async def control(self, body: Optional[ControlDevice]) -> str:
         body_string = json.dumps(body.to_dict(), separators=(',', ':')) if body else ""
@@ -42,9 +44,11 @@ class ControlClient:
             'clientVersion': self._client_version,
             'clientModel': self._client_model
         }
-
+        global status
         body_dict = body.to_dict() if body else None
-
-        status, message, res = await post(f"{self._url}/device/batchCommandOperate", headers, body_dict)
+        if self._is_group:
+            status, message, res = await post(f"{self._url}/deviceGroup/batchCommandOperate", headers, body_dict)
+        else:
+            status, message, res = await post(f"{self._url}/device/batchCommandOperate", headers, body_dict)
 
         return status

@@ -44,3 +44,20 @@ type_map = {
     #     "7-010-001": "carbonMonoxide",
     # }
 }
+
+group_type_map = {
+    "SWITCH": {
+        "Breaker": "On",
+    },
+    "LIGHT": {
+        "Light": "Dim",
+        "Color": "Temp",
+        "LightColor": "DimTemp",
+        "RGBW": "RGBW",
+        "RGB": "RGB",
+    },
+    "COVER": {
+        "Retractable": "Roll",
+        "Roller": "Roll",
+    },
+}
