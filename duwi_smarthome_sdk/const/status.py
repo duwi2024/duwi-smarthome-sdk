@@ -21,5 +21,3 @@ class Code(Enum):
     SYSTEM_HOUR_RATE_LIMIT = '99006'
     # 网关系统错误
     GATEWAY_SYS_ERROR = '99999'
-
-

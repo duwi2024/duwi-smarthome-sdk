@@ -11,7 +11,7 @@ build/
 *.egg-info/
 
 # virtual environment
-venv/
+.venv/
 ENV/
 
 # IDE - PyCharm
