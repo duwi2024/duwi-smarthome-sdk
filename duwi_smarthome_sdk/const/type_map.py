@@ -1,63 +1,81 @@
-# 设备类型映射
+# device_type
 type_map = {
-    "SWITCH": {
-        "1-002": "On",
-        "1-003": "On",
-        "1-005": "On",
-        "1-006": "On",
+    "switch": {
+        "1-002": "on",
+        "1-003": "on",
+        "1-005": "on",
+        "1-006": "on",
+        "107-001": "on",
     },
-    "LIGHT": {
-        "1-001": "On",
-        "1-004": "On",
-        "3-001": "Dim",
-        "3-002": "Temp",
-        "3-003": "DimTemp",
-        "3-004": "RGBW",
-        "3-005": "RGB",
-        "3-006": "RGBCW",
+    "light": {
+        "1-001": "on",
+        "1-004": "on",
+        "3-001": "dim",
+        "3-002": "temp",
+        "3-003": "dim_temp",
+        "3-004": "rgbw",
+        "3-005": "rgb",
+        "3-006": "rgbcw",
     },
-    "COVER": {
-        "4-001": "Roll",
-        "4-002": "Roll",
-        "4-003": "Shutter",
-        "4-004": "Shutter",
+    "cover": {
+        "4-001": "roll",
+        "4-002": "roll",
+        "4-003": "shutter",
+        "4-004": "shutter",
     },
-    # "CLIMATE": {
-    #     "5-001": "HeatCool",
-    #     "5-002": "Underfloor",
-    #     "5-003": "Ventilation",
-    #     "5-004": "HeatPump",
-    #     "5-005": "Combo",
-    # },
-    # "BINARY_SENSOR": {
-    #     "7-008-001": "Human",
-    #     "7-008-002": "Human",
-    #     "7-008-003": "Human",
-    # },
-    # "SENSOR": {
-    #     "7-001-001": "temperature",
-    #     "7-002-001": "humidity",
-    #     "7-003-001": "light",
-    #     "7-011-001": "volatileOrganicCompounds",
-    #     "7-005-001": "pm25",
-    #     "7-006-001": "carbonDioxide",
-    #     "7-010-001": "carbonMonoxide",
-    # }
 }
 
 group_type_map = {
-    "SWITCH": {
-        "Breaker": "On",
+    "switch": {
+        "breaker": "on",
     },
-    "LIGHT": {
-        "Light": "Dim",
-        "Color": "Temp",
-        "LightColor": "DimTemp",
-        "RGBW": "RGBW",
-        "RGB": "RGB",
+    "light": {
+        "light": "dim",
+        "color": "temp",
+        "lightcolor": "dim_temp",
+        "rgbw": "rgbw",
+        "rgb": "rGB",
     },
-    "COVER": {
-        "Retractable": "Roll",
-        "Roller": "Roll",
+    "cover": {
+        "retractable": "roll",
+        "roller": "roll",
     },
+}
+
+
+media_type_map = {
+    "8-001-001": "hua_ersi_music",
+    "8-001-002": "xiang_wang_music_s7_mini_3s",
+    "8-001-003": "xiang_wang_music_s8",
+    "8-001-004": "sheng_bi_ke_music",
+    "8-001-005": "bo_sheng_music",
+    "8-001-006": "sonos_music",
+}
+
+sensor_type_map = {
+    "7-001-001": ["temperature"],
+    "7-002-001": ["humidity"],
+    "7-003-001": ["light"],
+    "7-004-001": ["formaldehyde"],
+    "7-005-001": ["pm25"],
+    "7-006-001": ["carbon_dioxide"],
+    "7-007-001": ["air_quality"],
+    "7-008-001": ["human"],
+    "7-008-002": ["human"],
+    "7-008-003": ["human", "light"],
+    "7-009-001": ["trigger"],
+    "7-009-002": ["human"],
+    "7-009-003": ["human", "light"],
+    "7-009-004": ["trigger"],
+    "7-009-005": ["trigger"],
+    "7-009-006": ["trigger"],
+    "7-009-007": ["trigger"],
+    "7-009-008": ["trigger"],
+    "7-009-009": ["human"],
+    "7-009-010": ["human"],
+    "7-010-001": ["carbon_monoxide"],
+    "7-011-001": ["tvoc"],
+    "7-012-001": ["temperature", "humidity", "tvoc", "pm25", "formaldehyde", "carbon_dioxide", "pm10"],
+    "7-012-002": ["carbon_monoxide"],
+    "7-013-001": ["light", "human"],
 }

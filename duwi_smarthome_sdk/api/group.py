@@ -3,12 +3,12 @@ import logging
 
 from typing import Optional, List
 
-from duwi_smarthome_sdk.model.resp.group import Group
-from duwi_smarthome_sdk.util.http import get
-from duwi_smarthome_sdk.const.status import Code
-from duwi_smarthome_sdk.const.const import URL
-from duwi_smarthome_sdk.util.sign import md5_encrypt
-from duwi_smarthome_sdk.util.timestamp import current_timestamp
+from duwi_smarthome_sdk_dev.model.resp.group import Group
+from duwi_smarthome_sdk_dev.util.http import get
+from duwi_smarthome_sdk_dev.const.status import Code
+from duwi_smarthome_sdk_dev.const.const import URL
+from duwi_smarthome_sdk_dev.util.sign import md5_encrypt
+from duwi_smarthome_sdk_dev.util.timestamp import current_timestamp
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -93,7 +93,7 @@ class GroupClient:
             create_time=group_dict.get("createTime", ""),
             update_time=group_dict.get("updateTime", ""),
             execute_way=group_dict.get("executeWay"),
-            device_group_type=group_dict.get("deviceGroupType", ""),
+            device_group_type=group_dict.get("deviceGroupType", "").lower(),
             seq=group_dict.get("seq"),
             value=group_dict.get("value"),
             sync_host_sequences=group_dict.get("syncHostSequences", []),
