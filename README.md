@@ -1,5 +1,3 @@
-Sure, here is a continuation and completion of your README in English.
-
 ## Installation
 
 First, you need to make sure you have the SDK installed in your environment. You can do this by running:

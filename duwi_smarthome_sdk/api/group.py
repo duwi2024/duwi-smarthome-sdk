@@ -3,12 +3,12 @@ import logging
 
 from typing import Optional, List
 
-from duwi_smarthome_sdk_dev.model.resp.group import Group
-from duwi_smarthome_sdk_dev.util.http import get
-from duwi_smarthome_sdk_dev.const.status import Code
-from duwi_smarthome_sdk_dev.const.const import URL
-from duwi_smarthome_sdk_dev.util.sign import md5_encrypt
-from duwi_smarthome_sdk_dev.util.timestamp import current_timestamp
+from duwi_smarthome_sdk.model.resp.group import Group
+from duwi_smarthome_sdk.util.http import get
+from duwi_smarthome_sdk.const.status import Code
+from duwi_smarthome_sdk.const.const import URL
+from duwi_smarthome_sdk.util.sign import md5_encrypt
+from duwi_smarthome_sdk.util.timestamp import current_timestamp
 
 _LOGGER = logging.getLogger(__name__)
 
