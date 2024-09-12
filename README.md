@@ -1,95 +1,115 @@
-## Installation
+# Duwi Device Management SDK
 
-First, you need to make sure you have the SDK installed in your environment. You can do this by running:
+A Python SDK for Duwi Open API, which provides basic IoT capabilities like device management capabilities, helping you create IoT solutions. The Duwi IoT Development Platform opens basic IoT capabilities such as device management and data analytics services, helping you build robust IoT applications.
 
-```shell
-pip install duwi_smarthome_sdk_dev
-```
+## Features
 
-To update the SDK or any existing dependencies to their latest versions, execute:
+### APIs
 
-```shell
-pip install --upgrade duwi_smarthome_sdk_dev
-```
+- Manager.customerClient
+  - `login(phone: str, password: str) -> dict[str, Any] | None`
+  - `control(is_group: bool, body: Optional[ControlDevice]) -> dict[str, Any] | None`
+  - `discover() -> dict[str, Any]`
+  - `fetch_floor_info() -> dict[str, Any] | None`
+  - `fetch_house_info() -> dict[str, Any] | None`
+  - `discover_groups() -> dict[str, Any]`
+  - `refresh() -> dict[str, Any] | None`
+  - `fetch_room_info() -> dict[str, Any] | None`
+  - `control_scene(sceneNo: str) -> dict[str, Any] | None`
+  - `fetch_terminal_info() -> dict[str, Any] | None`
+  - `fetch_scene_info() -> dict[str, Any] | None`
+
+### Device Listeners
+
+- `SharingDeviceListener`: Interface for listening to device state changes.
+- `SharingTokenListener`: Interface for handling authentication token updates.
+
+## Possible Scenarios
+
+- Smart Home Integration
+- Automated Device Control
+- Real-time Device Monitoring
 
 ## Usage
 
-### Authentication
+### Installation
 
-Before you start fetching information or interacting with devices, you need to authenticate and obtain an access token. Start by initializing the login client:
-
-```python
-from duwi_smarthome_sdk_dev import AccountClient
-
-cc = AccountClient(
-    app_key="your_app_key",
-    app_secret="your_app_secret",
-    app_version="0.0.1",
-    client_version="0.0.1",
-    client_model="homeassistant",
-)
-
-res = await cc.login(phone="your_phone_number", password="your_password")
+```bash
+pip3 install duwi-open-sdk
 ```
 
-Once logged in, you will receive an access token. This token will be used in subsequent requests to authenticate and authorize your interactions.
+### Example
 
-### Fetching House Information
+#### Initialize the Manager
 
-With the access token, you can now fetch house information or any other data provided by the SDK. Initialize the house info client with your credentials and access token:
-
-```python
-from duwi_smarthome_sdk_dev import HouseInfoClient
-
-cc = HouseInfoClient(
-    app_key="your_app_key",
-    app_secret="your_app_secret",
-    access_token="your_access_token",
-    app_version="0.0.1",
-    client_version="0.0.1",
-    client_model="homeassistant",
-)
-
-res = await cc.fetch_house_info()
-```
-
-### WebSocket Device Synchronization
-
-For real-time device synchronization, set up the WebSocket (WS) client with the necessary credentials. You will also need to define a callback function that handles incoming messages.
-
-#### Setting up the WebSocket Client
+To initialize the manager, use the following code:
 
 ```python
-from duwi_smarthome_sdk_dev import DeviceSynchronizationWS
-import logging
+from duwi_smarthome_sdk.device_scene_models import CustomerDevice
+from duwi_smarthome_sdk import Manager
 
-_LOGGER = logging.getLogger(__name__)
-
-# Define your callback function
-async def on_callback(message: str):
-    _LOGGER.info(f"on_callback: {message}")
-
-# Initialize the WS client with your credentials
-ws = DeviceSynchronizationWS(
-    on_callback=on_callback,
-    app_key="your_app_key",
-    app_secret="your_app_secret",
-    access_token="your_access_token",
-    refresh_token="your_refresh_token",
-    house_no="your_house_no",
-    app_version="0.0.1",
-    client_version="0.0.1",
-    client_model="homeassistant",
+manager = Manager(
+    _id="example_entry_id",
+    customer_api=CustomerApi(
+        address=HTTP_ADDRESS,
+        ws_address=WEBSOCKET_ADDRESS,
+        app_key="your_app_key",
+        app_secret="your_app_secret",
+        house_no="your_house_no",
+        house_name="Your House Name",
+        access_token="your_access_token",
+        refresh_token="your_refresh_token",
+        client_version="1.0",
+        client_model="Model XYZ",
+        app_version="0.1.0",
+    ),
+    house_key="your_house_key",
 )
 
-_LOGGER.warning('Connecting to WS server...')
-await ws.reconnect()
-await ws.listen()
-await ws.keep_alive()
+# Execute login
+login_status = await manager.login("your_phone_number", "your_password")
 ```
 
-This will establish a connection to the WebSocket server, listen for messages, and handle them using the provided callback function.
+### Implementing Listeners
 
-## Conclusion
+To listen to device status updates and handle token authentication, implement the listeners as follows:
 
-By following these steps, you should have a functional setup allowing you to authenticate, fetch data, and synchronize devices in real-time using the `duwi_smarthome_sdk_dev`. This guide should serve as a starting point for integrating your smart home devices with Home Assistant using the SDK.
+```python
+class DeviceListener(SharingDeviceListener):
+    async def on_device_update(self, device_id: str, data: dict):
+        # Handle device update logic
+        pass
+
+class TokenListener(SharingTokenListener):
+    async def on_token_refresh(self, new_token: str):
+        # Handle token refresh logic
+        pass
+    
+# Add the listeners to the manager
+device_listener = DeviceListener()
+token_listener = TokenListener()
+
+manager.add_device_listener(device_listener)
+```
+
+### Accessing Device Information
+
+You can access any device information through the manager:
+
+```python
+device_info = manager.device_map.get("your_device_id")
+```
+
+## Release Note
+
+| version | Description       |
+|---------|-------------------|
+| 0.2.4   | Initial release    |
+
+## Issue Feedback
+
+You can provide feedback on your issue via **Github Issue**.
+
+## License
+
+**duwi-device-management-sdk** is available under the MIT license. Please see the [LICENSE](./LICENSE) file for more info.
