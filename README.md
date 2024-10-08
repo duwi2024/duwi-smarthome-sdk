@@ -104,7 +104,7 @@ device_info = manager.device_map.get("your_device_id")
 
 | version | Description       |
 |---------|-------------------|
-| 0.7.1   | Initial release    |
+| 0.7.4   | Initial release    |
 
 ## Issue Feedback
 

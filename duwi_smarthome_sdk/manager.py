@@ -64,14 +64,12 @@ class SharingDeviceListener(metaclass=ABCMeta):
 class Manager:
     def __init__(
             self,
-            _id: str,
             house_key: str,
             customer_api: CustomerApi,
             token_listener: SharingTokenListener = None,
     ) -> None:
         self._is_over = False
         self._is_init = True
-        self._id = _id
         self._customer_api = customer_api
         self.house_key = house_key
         self.device_map: dict[str, CustomerDevice] = {}
@@ -82,18 +80,13 @@ class Manager:
         self._token_listener = token_listener
         self._device_listeners = set()
 
-    async def init_manager(self, phone: str, password: str) -> bool:
-        data = await self.customerClient.login(phone, password)
-        status = data.get("code")
-        if status != DuwiCode.SUCCESS.value:
-            _LOGGER.error("login error: %s", status)
-            return False
-
+    async def init_manager(self):
         refresh_data = await self.customerClient.refresh()
-        self._customer_api.access_token_expire_time = refresh_data.get("data", {}).get("accessTokenExpireTime")
-
-        _LOGGER.info("Duwi manager init success.")
-        return True
+        if refresh_data.get("code") != DuwiCode.SUCCESS.value:
+            _LOGGER.error("Duwi manager init failed.")
+        else:
+            self._customer_api.access_token_expire_time = refresh_data.get("data", {}).get("accessTokenExpireTime")
+            _LOGGER.info("Duwi manager init success.")
 
     async def update_device_cache(self) -> bool:
         await self.ws.add_message_listener(self.on_ws_message)

@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.7.1'
+VERSION = '0.7.4'
 DESCRIPTION = 'sdk for duwi third platform'
 
 with open("README.md", encoding="utf-8") as fh:
