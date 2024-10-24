@@ -284,10 +284,16 @@ class Manager:
                 refresh_token_data = await self.customerClient.refresh()
                 auth_data = refresh_token_data.get("data", {})
                 # update token
-                self._token_refresh_callback(True, auth_data)
-                self._customer_api.access_token_expire_time = auth_data.get("accessTokenExpire")
-            else:
-                self._token_refresh_callback(False, None)
+                self._token_refresh_callback(
+                    refresh_token_data.get("code") == DuwiCode.SUCCESS.value,
+                    {
+                        "access_token": auth_data.get("accessToken"),
+                        "refresh_token": auth_data.get("refreshToken"),
+                    },
+                )
+                self._customer_api.access_token_expire_time = auth_data.get(
+                    "accessTokenExpire"
+                )
         data = await self.customerClient.control(is_group, cd)
         if data.get("code") != DuwiCode.SUCCESS.value:
             _LOGGER.error("send_commands error = %s message %s", data.get("code"), data.get("message"))

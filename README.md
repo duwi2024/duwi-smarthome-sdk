@@ -80,14 +80,8 @@ class DeviceListener(SharingDeviceListener):
         # Handle device update logic
         pass
 
-class TokenListener(SharingTokenListener):
-    async def on_token_refresh(self, new_token: str):
-        # Handle token refresh logic
-        pass
-    
 # Add the listeners to the manager
 device_listener = DeviceListener()
-token_listener = TokenListener()
 
 manager.add_device_listener(device_listener)
 ```
@@ -104,7 +98,7 @@ device_info = manager.device_map.get("your_device_id")
 
 | version | Description       |
 |---------|-------------------|
-| 0.7.4   | Initial release    |
+| 0.7.8   | Initial release    |
 
 ## Issue Feedback
 
