@@ -2,12 +2,12 @@ import json
 import time
 from abc import ABCMeta
 from datetime import datetime
-from typing import Any, List
+from typing import Any, List, Callable
 
 from .const import _LOGGER, DuwiCode, HAVC_TYPE_MAP, DEVICE_TYPE_MAP, GROUP_TYPE
 from .device_control import ControlDevice
 from .device_scene_models import CustomerScene, CustomerDevice
-from .base_api import SharingTokenListener, CustomerApi
+from .base_api import CustomerApi
 from .customer_client import CustomerClient
 from .ws import DeviceSynchronizationWS
 
@@ -66,10 +66,9 @@ class Manager:
             self,
             house_key: str,
             customer_api: CustomerApi,
-            token_listener: SharingTokenListener = None,
+            token_refresh_callback: Callable[[bool, [dict[str, Any]]], None]
     ) -> None:
         self._is_over = False
-        self._is_init = True
         self._customer_api = customer_api
         self.house_key = house_key
         self.device_map: dict[str, CustomerDevice] = {}
@@ -77,7 +76,7 @@ class Manager:
         self.host_list: List[str] = []
         self.customerClient = CustomerClient(self._customer_api)
         self.ws = DeviceSynchronizationWS(self._customer_api)
-        self._token_listener = token_listener
+        self._token_refresh_callback = token_refresh_callback
         self._device_listeners = set()
 
     async def init_manager(self):
@@ -94,7 +93,7 @@ class Manager:
         if not floor_data or not room_data or not terminal_data or not terminal_cloud_dict:
             return False
 
-        # 同步局域网主机
+        #
         host_sequence_list = []
         for key, value in terminal_cloud_dict.items():
             if (value.get("host") not in host_sequence_list and
@@ -284,13 +283,11 @@ class Manager:
             if expire_time_ts < time.time() + 2 * 24 * 60 * 60:
                 refresh_token_data = await self.customerClient.refresh()
                 auth_data = refresh_token_data.get("data", {})
-                self._token_listener.update_token(
-                    is_refresh=refresh_token_data.get("code") == DuwiCode.SUCCESS.value,
-                    token_info={
-                        "access_token": auth_data.get("accessToken"),
-                        "refresh_token": auth_data.get("refreshToken")
-                    })
+                # update token
+                self._token_refresh_callback(True, auth_data)
                 self._customer_api.access_token_expire_time = auth_data.get("accessTokenExpire")
+            else:
+                self._token_refresh_callback(False, None)
         data = await self.customerClient.control(is_group, cd)
         if data.get("code") != DuwiCode.SUCCESS.value:
             _LOGGER.error("send_commands error = %s message %s", data.get("code"), data.get("message"))

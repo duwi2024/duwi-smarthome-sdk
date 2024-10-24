@@ -13,12 +13,6 @@ from .sign import md5_encrypt
 from .const import _LOGGER
 
 
-class SharingTokenListener(metaclass=ABCMeta):
-    def update_token(self, is_refresh: bool, token_info: dict[str, Any] = None):
-        """Update token."""
-        pass
-
-
 class CustomerApi:
     def __init__(
             self,
@@ -30,15 +24,12 @@ class CustomerApi:
             client_version: str,
             client_model: str,
             house_no: str = "",
-            house_name: str = "",
-            listener: SharingTokenListener = None,
             access_token: str = "",
             refresh_token: str = "",
     ):
         self.address = address
         self.ws_address = ws_address
         self.house_no = house_no
-        self.house_name = house_name
         self.app_key = app_key
         self.app_secret = app_secret
         self.access_token = access_token
@@ -46,7 +37,6 @@ class CustomerApi:
         self.app_version = app_version
         self.client_version = client_version
         self.client_model = client_model
-        self.token_listener = listener
         self.timeout = ClientTimeout(total=15)
         self.access_token_expire_time = None
 
